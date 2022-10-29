@@ -223,8 +223,12 @@ export default {
     // 开始绘制时，指定绘画种类
     drawTypeChange(e) {
       this.drawType = e;
+      // this.canvas.c.set('skipTargetFind', true)
+      // 绘制过程中关闭选中
+      this.canvas.c.selection = !e;
       this.$emit('setDrawType', this.drawType);
-      this.canvas.skipTargetFind = !!e
+      this.canvas.c.skipTargetFind = !!e
+
     },
 
     deleteObj() {
