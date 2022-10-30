@@ -143,8 +143,12 @@ export default {
   mounted() {
     this.canvas = canvas.c = new fabric.Canvas('canvas', {
       fireRightClick: true,
-      fireMiddleClick: true
+      fireMiddleClick: true,
+      selectionFullyContained: false,
+      selectionKey: 'ctrlKey',
+      targetFindTolerance:10
     });
+    this.canvas.set('selectionFullyContained', true)
     initAligningGuidelines(this.canvas)
     initCenteringGuidelines(this.canvas)
 
@@ -163,6 +167,64 @@ export default {
       fabric.Object.prototype.cornerColor = '#ffffff';
       fabric.Object.prototype.cornerStyle = 'circle';
       fabric.Object.prototype.borderColor = '#85CCF9';
+
+      fabric.Intersection.intersectLinePolygon = function (a1, a2, points, infinite = true) {
+        var result = new fabric.Intersection(),
+          length = points.length,
+          b1, b2, inter, i;
+
+        for (i = 0; i < length; i++) {
+          b1 = points[i];
+          b2 = points[(i + 1) % length];
+          inter = fabric.Intersection.intersectLineLine(a1, a2, b1, b2);
+
+          result.appendPoints(inter.points);
+        }
+        if (result.points.length > 0) {
+          result.status = 'Intersection';
+        }
+        return result;
+      }
+
+      fabric.Intersection.intersectLineLine = function (a1, a2, b1, b2) {
+        var result,
+          uaT = (b2.x - b1.x) * (a1.y - b1.y) - (b2.y - b1.y) * (a1.x - b1.x),
+          ubT = (a2.x - a1.x) * (a1.y - b1.y) - (a2.y - a1.y) * (a1.x - b1.x),
+          uB = (b2.y - b1.y) * (a2.x - a1.x) - (b2.x - b1.x) * (a2.y - a1.y);
+        if (uB !== 0) {
+          var ua = uaT / uB,
+            ub = ubT / uB;
+          if (0 <= ua && ua <= 1 && 0 <= ub && ub <= 1) {
+            result = new fabric.Intersection('Intersection');
+            result.appendPoint(new fabric.Point(a1.x + ua * (a2.x - a1.x), a1.y + ua * (a2.y - a1.y)));
+          }
+          else {
+            result = new fabric.Intersection();
+          }
+        }
+        else {
+          if (uaT === 0 || ubT === 0) {
+            result = new fabric.Intersection('Coincident');
+          }
+          else {
+            result = new fabric.Intersection('Parallel');
+          }
+        }
+        return result;
+      };
+      // fabric.Canvas.prototype.getActiveObjects = function () {
+      //   var active = this._activeObject;
+      //   if (active) {
+      //     if (active.type === 'activeSelection' && active._objects) {
+      //       return active._objects.slice(0);
+      //     }
+      //     else {
+      //       return [active];
+      //     }
+      //   }
+      //   return [];
+      // }
+
     },
     rigthCilck(e) {
       this.$refs.contextMenu.canvasOnMouseDown(e);
