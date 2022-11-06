@@ -1973,6 +1973,11 @@
   optionalDependencies:
     prettier "^1.18.2 || ^2.0.0"
 
+"@vue/devtools-api@^6.0.0-beta.11":
+  version "6.4.5"
+  resolved "http://127.0.0.1:4873/@vue%2fdevtools-api/-/devtools-api-6.4.5.tgz#d54e844c1adbb1e677c81c665ecef1a2b4bb8380"
+  integrity sha512-JD5fcdIuFxU4fQyXUu3w2KpAJHzTVdN+p4iOX2lMWSHMOoQdMAcpFLZzm9Z/2nmsoZ1a96QEhZ26e50xLBsgOQ==
+
 "@vue/eslint-config-airbnb@^6.0.0":
   version "6.0.0"
   resolved "http://127.0.0.1:4873/@vue%2feslint-config-airbnb/-/eslint-config-airbnb-6.0.0.tgz#6270f44dbb18c15d95be8e450966fe41249bba8a"
@@ -8235,6 +8240,11 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
+typescript@latest:
+  version "4.8.4"
+  resolved "http://127.0.0.1:4873/typescript/-/typescript-4.8.4.tgz#c464abca159669597be5f96b8943500b238e60e6"
+  integrity sha512-QCh+85mCy+h0IGff8r5XWzOVSbBO+KfeYrMQh7NJ58QujwcE22u+NUSmUxqF+un70P9GXKxa2HCNiTTMJknyjQ==
+
 unbox-primitive@^1.0.2:
   version "1.0.2"
   resolved "http://127.0.0.1:4873/unbox-primitive/-/unbox-primitive-1.0.2.tgz#29032021057d5e6cdbd08c5129c226dff8ed6f9e"
@@ -8452,6 +8462,13 @@ vue@^2.6.14:
   dependencies:
     "@vue/compiler-sfc" "2.7.13"
     csstype "^3.1.0"
+
+vuex@^4.0.2:
+  version "4.0.2"
+  resolved "http://127.0.0.1:4873/vuex/-/vuex-4.0.2.tgz#f896dbd5bf2a0e963f00c67e9b610de749ccacc9"
+  integrity sha512-M6r8uxELjZIK8kTKDGgZTYX/ahzblnzC4isU1tpmEuOIIKmV+TRdc+H4s8ds2NuZ7wpUTdGRzJRtoj+lI+pc0Q==
+  dependencies:
+    "@vue/devtools-api" "^6.0.0-beta.11"
 
 w3c-hr-time@^1.0.2:
   version "1.0.2"
