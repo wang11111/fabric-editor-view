@@ -146,7 +146,7 @@ export default {
       fireMiddleClick: true,
       selectionFullyContained: false,
       selectionKey: 'ctrlKey',
-      targetFindTolerance:10
+      targetFindTolerance: 10
     });
     this.canvas.set('selectionFullyContained', true)
     initAligningGuidelines(this.canvas)
@@ -185,33 +185,67 @@ export default {
         }
         return result;
       }
+      fabric.Canvas.prototype.setCursor = function (value) {
+        this.upperCanvasEl.style.cursor = value;
+      }
 
-      fabric.Intersection.intersectLineLine = function (a1, a2, b1, b2) {
-        var result,
-          uaT = (b2.x - b1.x) * (a1.y - b1.y) - (b2.y - b1.y) * (a1.x - b1.x),
-          ubT = (a2.x - a1.x) * (a1.y - b1.y) - (a2.y - a1.y) * (a1.x - b1.x),
-          uB = (b2.y - b1.y) * (a2.x - a1.x) - (b2.x - b1.x) * (a2.y - a1.y);
-        if (uB !== 0) {
-          var ua = uaT / uB,
-            ub = ubT / uB;
-          if (0 <= ua && ua <= 1 && 0 <= ub && ub <= 1) {
-            result = new fabric.Intersection('Intersection');
-            result.appendPoint(new fabric.Point(a1.x + ua * (a2.x - a1.x), a1.y + ua * (a2.y - a1.y)));
+      fabric.Canvas.prototype._setCursorFromEvent = function (e, target) {
+        console.log(target);
+        if (!target) {
+          this.setCursor(this.defaultCursor);
+          return false;
+        }
+        var hoverCursor = target.hoverCursor || this.hoverCursor,
+          activeSelection = this._activeObject && this._activeObject.type === 'activeSelection' ?
+            this._activeObject : null,
+          // only show proper corner when group selection is not active
+          corner = (!activeSelection || !activeSelection.contains(target))
+            // here we call findTargetCorner always with undefined for the touch parameter.
+            // we assume that if you are using a cursor you do not need to interact with
+            // the bigger touch area.
+            && target._findTargetCorner(this.getPointer(e, true));
+
+        if (!corner) {
+          if (target.subTargetCheck) {
+            // hoverCursor should come from top-most subTarget,
+            // so we walk the array backwards
+            this.targets.concat().reverse().map(function (_target) {
+              hoverCursor = _target.hoverCursor || hoverCursor;
+            });
           }
-          else {
-            result = new fabric.Intersection();
-          }
+          this.setCursor(hoverCursor);
         }
         else {
-          if (uaT === 0 || ubT === 0) {
-            result = new fabric.Intersection('Coincident');
+          this.setCursor(this.getCornerCursor(corner, target, e));
+        }
+      },
+
+        fabric.Intersection.intersectLineLine = function (a1, a2, b1, b2) {
+          var result,
+            uaT = (b2.x - b1.x) * (a1.y - b1.y) - (b2.y - b1.y) * (a1.x - b1.x),
+            ubT = (a2.x - a1.x) * (a1.y - b1.y) - (a2.y - a1.y) * (a1.x - b1.x),
+            uB = (b2.y - b1.y) * (a2.x - a1.x) - (b2.x - b1.x) * (a2.y - a1.y);
+          if (uB !== 0) {
+            var ua = uaT / uB,
+              ub = ubT / uB;
+            if (0 <= ua && ua <= 1 && 0 <= ub && ub <= 1) {
+              result = new fabric.Intersection('Intersection');
+              result.appendPoint(new fabric.Point(a1.x + ua * (a2.x - a1.x), a1.y + ua * (a2.y - a1.y)));
+            }
+            else {
+              result = new fabric.Intersection();
+            }
           }
           else {
-            result = new fabric.Intersection('Parallel');
+            if (uaT === 0 || ubT === 0) {
+              result = new fabric.Intersection('Coincident');
+            }
+            else {
+              result = new fabric.Intersection('Parallel');
+            }
           }
-        }
-        return result;
-      };
+          return result;
+        };
       // fabric.Canvas.prototype.getActiveObjects = function () {
       //   var active = this._activeObject;
       //   if (active) {

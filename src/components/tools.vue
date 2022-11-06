@@ -152,7 +152,7 @@ export default {
 
       // 绘制多边形
       if (this.drawType == "polygon") {
-        this.canvas.skipTargetFind = false;
+        // this.canvas.skipTargetFind = false;
         try {
           // 此段为判断是否闭合多边形，点击红点时闭合多边形
           if (this.pointArray.length > 1) {
@@ -227,7 +227,7 @@ export default {
       // 绘制过程中关闭选中
       this.canvas.c.selection = !e;
       this.$emit('setDrawType', this.drawType);
-      this.canvas.c.skipTargetFind = !!e
+      // this.canvas.c.skipTargetFind = !!e
 
     },
 

@@ -20,7 +20,8 @@
     "view-design": "^4.7.0",
     "vue": "^2.6.14",
     "vue-clipboard2": "^0.3.3",
-    "vue-router": "^3.5.1"
+    "vue-router": "^3.5.1",
+    "jquery":"3.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -41,6 +42,7 @@
     "jest": "^27.0.5",
     "less": "^4.0.0",
     "less-loader": "^8.0.0",
-    "vue-template-compiler": "^2.6.14"
+    "vue-template-compiler": "^2.6.14",
+    "typescript":"latest"
   }
 }
